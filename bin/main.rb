@@ -1,3 +1,7 @@
+#!/usr/bin/env ruby
+
 def initial_method
-  # initialize method
+  puts 'Hello world!'
 end
+
+initial_method
