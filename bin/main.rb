@@ -40,17 +40,33 @@ def choose_winner(player1_name, player2_name)
   end
 end
 
+def validate_name(name)
+  loop do
+    if name == ''
+      puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
+      name = user_input.capitalize
+    elsif name.length < 2
+      puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
+      name = user_input.capitalize
+    else
+      break
+    end
+  end
+  name
+end
+
 puts 'Welcome to Ruby Tic-Tac-Toe!'
 puts
 puts 'Enter Player 1 Name:'
-player1_name = user_input.capitalize
-
+p1_name = user_input
+player1_name = validate_name(p1_name)
 puts
 
 puts 'Enter Player 2 Name:'
-player2_name = user_input.capitalize
-
+p2_name = user_input.capitalize
+player2_name = validate_name(p2_name)
 puts
+
 puts "#{player1_name} will play #{CHARACTER_1} and #{player2_name} will play #{CHARACTER_2}"
 puts
 puts 'Let us play!'
