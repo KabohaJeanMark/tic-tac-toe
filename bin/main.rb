@@ -12,7 +12,6 @@ def clear_terminal
 end
 
 def display_board
-  #code
   puts '+---+---+---+'
   puts '| 1 | 2 | 3 |'
   puts '+---+---+---+'
@@ -20,6 +19,17 @@ def display_board
   puts '+---+---+---+'
   puts '| 7 | 8 | 9 |'
   puts '+---+---+---+'
+end
+
+def choose_winner(player1_name,player2_name)
+  num = rand(15)
+  if num < 5
+    puts "#{player1_name} wins"
+  elsif num < 10
+    puts 'It is a tie'
+  else
+    puts "#{player2_name} wins"
+  end
 end
 
 puts 'Welcome to Ruby Tic Tac Toe'
@@ -36,7 +46,7 @@ puts
 puts "#{player1_name} will play #{CHARACTER_1}"
 puts "#{player2_name} will play #{CHARACTER_2}"
 
-puts 'Let us play..'
+puts 'Let us play!'
 
 sleep(3)
 
@@ -46,16 +56,21 @@ sleep(1)
 
 display_board
 
-turn = 1
-loop do
+9.times do |turn|
   name = turn.even? ? player2_name : player1_name
   puts "It's #{name}'s turn"
+  puts
   puts 'Please select an available cell from the board'
+  puts
   cell = user_input.to_i
   while cell < 1 || cell > 9
     puts 'Invalid move. Please enter integer from 1 to 9'
     cell = user_input.to_i
   end
-  turn += 1
-  break if turn > 9
 end
+
+sleep(1)
+
+choose_winner(player1_name,player2_name)
+
+sleep(2)
