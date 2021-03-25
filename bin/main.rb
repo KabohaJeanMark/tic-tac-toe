@@ -27,8 +27,8 @@ def display_board
   puts '+---+---+---+'
 end
 
-def choose_winner(player1_name,player2_name)
-  num = rand(15)
+def choose_winner(player1_name, player2_name)
+  num = rand(10)
   if num < 5
     puts "#{player1_name} you WIN the game"
   elsif num < 10
@@ -40,7 +40,7 @@ def choose_winner(player1_name,player2_name)
   end
 end
 
-puts 'Welcome to Ruby Tic Tac Toe'
+puts 'Welcome to Ruby Tic-Tac-Toe!'
 puts
 puts 'Enter Player 1 Name:'
 player1_name = user_input.capitalize
@@ -51,12 +51,11 @@ puts 'Enter Player 2 Name:'
 player2_name = user_input.capitalize
 
 puts
-puts "#{player1_name} will play #{CHARACTER_1}"
-puts "#{player2_name} will play #{CHARACTER_2}"
-
+puts "#{player1_name} will play #{CHARACTER_1} and #{player2_name} will play #{CHARACTER_2}"
+puts
 puts 'Let us play!'
 
-sleep(2)
+sleep(3)
 
 clear_terminal
 
@@ -67,7 +66,7 @@ display_board
 9.times do |turn|
   lines = 6
 
-  name = turn.even? ? player2_name : player1_name
+  name = turn.even? ? player1_name : player2_name
   puts
   puts "It's #{name}'s turn"
   puts
@@ -75,7 +74,7 @@ display_board
   puts
   cell = user_input.to_i
   while cell < 1 || cell > 9
-    puts 'Please enter a number from 1-9'
+    puts 'Invalid move. Please enter a number from 1-9'
     cell = user_input.to_i
     lines += 2
   end
