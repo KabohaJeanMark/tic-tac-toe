@@ -1,18 +1,16 @@
 #!/usr/bin/env ruby
 
-require_relative './board'
-require_relative './player'
+require_relative './lib/board'
+require_relative './lib/player'
 
 def user_input
   gets.chomp
 end
 
 def clear_terminal
-  system('clear') || system('cls') # https://stackoverflow.com/a/19059008
+  system('clear') || system('cls')
 end
 
-# https://stackoverflow.com/a/31090956
-# see comment by cremno
 def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
@@ -113,7 +111,7 @@ def take_turns(board, player1, player2, token_array)
       break if winner
     end
 
-    sleep 1
+    sleep(1)
     clear_terminal
     puts board
   end
@@ -164,7 +162,7 @@ def play_game
 
   puts "#{player1} will play #{token_array[0]} and #{player2} will play #{token_array[1]}\n\nLet us play!"
 
-  sleep(3)
+  sleep(1)
 
   clear_terminal
 
