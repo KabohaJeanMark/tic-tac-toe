@@ -76,21 +76,22 @@ end
 
 def valid_move?(board, cell, token_array)
   loop do
-    if cell < 1 || cell > 9
+    num = cell.to_i
+    if num < 1 || num > 9
       clear_lines(3)
-      puts 'Invalid move. Please enter a number from 1-9'
+      puts "Invalid move. Please enter a number from 1-9. #{cell} is not a valid number"
       puts
-      cell = user_input.to_i
-    elsif token_array.include?(board.track(cell))
+      cell = user_input
+    elsif token_array.include?(board.track(num))
       clear_lines(3)
-      puts 'Invalid move. Position already played. Please select another number'
+      puts "Invalid move. Position #{cell} already played. Please select another number"
       puts
-      cell = user_input.to_i
+      cell = user_input
     else
       break
     end
   end
-  cell
+  cell.to_i
 end
 
 def take_turns(board, player1, player2, token_array)
@@ -103,7 +104,7 @@ def take_turns(board, player1, player2, token_array)
     puts
     puts 'Please select an available cell from the board `- -`'
     puts
-    cell = user_input.to_i
+    cell = user_input
     cell = valid_move?(board, cell, token_array)
     board.set(cell, player.token)
 
@@ -126,10 +127,11 @@ def replay?
 
   loop do
     command = user_input.downcase
-    if command == 'x'
+    case command
+    when 'x'
       clear_terminal
       exit
-    elsif command == 'y'
+    when 'y'
       clear_terminal
       play_game
     else
