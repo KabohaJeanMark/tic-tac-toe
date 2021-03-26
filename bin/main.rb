@@ -5,6 +5,7 @@ require_relative './player'
 
 CHARACTER_1 = 'X'.freeze
 CHARACTER_2 = 'O'.freeze
+token_array = [CHARACTER_1, CHARACTER_2]
 MIN_MOVES = 5
 
 def user_input
@@ -74,10 +75,27 @@ def check_winner(board, player1, player2)
   ]
   groups.each do |group|
     players.each { |player| return player if check_three_cells_match(group, board, player.token) }
-    #return player1 if check_three_cells_match(row, board, player1.token)
-    #return player2 if check_three_cells_match(row, board, player2.token)
   end
   nil
+end
+
+def valid_move?(board, cell, token_array)
+  loop do
+    if cell < 1 || cell > 9
+      clear_lines(3)
+      puts 'Invalid move. Please enter a number from 1-9'
+      puts
+      cell = user_input.to_i
+    elsif token_array.include?(board.track(cell))
+      clear_lines(3)
+      puts 'Invalid move. Position already played. Please select another number'
+      puts
+      cell = user_input.to_i
+    else
+      break
+    end
+  end
+  cell
 end
 
 board = Board.new
@@ -111,8 +129,6 @@ puts board
 winner = nil
 
 9.times do |turn|
-  lines = 6
-
   player = turn.even? ? player1 : player2
   puts
   puts "It's #{player}'s turn"
@@ -120,14 +136,10 @@ winner = nil
   puts 'Please select an available cell from the board `- -`'
   puts
   cell = user_input.to_i
-  while cell < 1 || cell > 9
-    puts 'Invalid move. Please enter a number from 1-9'
-    cell = user_input.to_i
-    lines += 2
-  end
+  cell = valid_move?(board, cell, token_array)
   board.set(cell, player.token)
 
-  if turn >= MIN_MOVES
+  if turn >= MIN_MOVES - 1
     winner = check_winner(board, player1, player2)
     break if winner
   end
@@ -143,13 +155,10 @@ clear_terminal
 puts board
 puts
 
-#choose_winner(player1, player2)
 if winner
   puts "#{winner} you WIN the game"
-else num < 10
+else
   puts "It's a TIE!"
   puts
   puts 'Game Over'
 end
-
-command = user_input
