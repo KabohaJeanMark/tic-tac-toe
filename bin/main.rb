@@ -5,6 +5,7 @@ require_relative './player'
 
 CHARACTER_1 = 'X'.freeze
 CHARACTER_2 = 'O'.freeze
+MIN_MOVES = 5
 
 def user_input
   gets.chomp
@@ -19,8 +20,6 @@ end
 def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
-
-board = Board.new
 
 def choose_winner(player1, player2)
   num = rand(15)
@@ -50,6 +49,39 @@ def validate_name(name)
   name
 end
 
+def check_three_cells_match(array, board, token)
+  result = true
+  array.each do |cell|
+    if board.track(cell) != token
+      result = false
+      break
+    end
+  end
+  result
+end
+
+def check_winner(board, player1, player2)
+  players = [player1, player2]
+  groups = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7]
+  ]
+  groups.each do |group|
+    players.each { |player| return player if check_three_cells_match(group, board, player.token) }
+    #return player1 if check_three_cells_match(row, board, player1.token)
+    #return player2 if check_three_cells_match(row, board, player2.token)
+  end
+  nil
+end
+
+board = Board.new
+
 puts 'Welcome to Ruby Tic-Tac-Toe!'
 puts
 puts 'Enter Player 1 Name:'
@@ -76,6 +108,8 @@ sleep(1)
 
 puts board
 
+winner = nil
+
 9.times do |turn|
   lines = 6
 
@@ -92,6 +126,12 @@ puts board
     lines += 2
   end
   board.set(cell, player.token)
+
+  if turn >= MIN_MOVES
+    winner = check_winner(board, player1, player2)
+    break if winner
+  end
+
   sleep 1
   clear_terminal
   puts board
@@ -99,8 +139,17 @@ end
 
 sleep(1)
 
+clear_terminal
+puts board
 puts
 
-choose_winner(player1, player2)
+#choose_winner(player1, player2)
+if winner
+  puts "#{winner} you WIN the game"
+else num < 10
+  puts "It's a TIE!"
+  puts
+  puts 'Game Over'
+end
 
-sleep(2)
+command = user_input
