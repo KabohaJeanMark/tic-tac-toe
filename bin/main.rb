@@ -1,5 +1,8 @@
 #!/usr/bin/env ruby
 
+require_relative './board.rb'
+require_relative './player.rb'
+
 CHARACTER_1 = 'X'.freeze
 CHARACTER_2 = 'O'.freeze
 
@@ -27,16 +30,16 @@ def display_board
   puts '+---+---+---+'
 end
 
-def choose_winner(player1_name, player2_name)
+def choose_winner(player1, player2)
   num = rand(10)
   if num < 5
-    puts "#{player1_name} you WIN the game"
+    puts "#{player1} you WIN the game"
   elsif num < 10
     puts "It's a TIE!"
     puts
     puts 'Game Over'
   else
-    puts "#{player2_name} you WIN the game"
+    puts "#{player2} you WIN the game"
   end
 end
 
@@ -59,15 +62,17 @@ puts 'Welcome to Ruby Tic-Tac-Toe!'
 puts
 puts 'Enter Player 1 Name:'
 p1_name = user_input
-player1_name = validate_name(p1_name)
+p1_name = validate_name(p1_name)
+player1 = Player.new(p1_name, CHARACTER_1)
 puts
 
 puts 'Enter Player 2 Name:'
-p2_name = user_input.capitalize
-player2_name = validate_name(p2_name)
+p2_name = user_input
+p2_name = validate_name(p2_name)
+player2 = Player.new(p2_name, CHARACTER_2)
 puts
 
-puts "#{player1_name} will play #{CHARACTER_1} and #{player2_name} will play #{CHARACTER_2}"
+puts "#{player1} will play #{CHARACTER_1} and #{player2} will play #{CHARACTER_2}"
 puts
 puts 'Let us play!'
 
@@ -82,9 +87,9 @@ display_board
 9.times do |turn|
   lines = 6
 
-  name = turn.even? ? player1_name : player2_name
+  player = turn.even? ? player1 : player2
   puts
-  puts "It's #{name}'s turn"
+  puts "It's #{player}'s turn"
   puts
   puts 'Please select an available cell from the board `- -`'
   puts
@@ -102,6 +107,6 @@ sleep(1)
 
 puts
 
-choose_winner(player1_name, player2_name)
+choose_winner(player1, player2)
 
 sleep(2)
