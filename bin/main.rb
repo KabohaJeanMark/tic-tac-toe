@@ -3,11 +3,6 @@
 require_relative './board'
 require_relative './player'
 
-CHARACTER_1 = 'X'.freeze
-CHARACTER_2 = 'O'.freeze
-token_array = [CHARACTER_1, CHARACTER_2]
-MIN_MOVES = 5
-
 def user_input
   gets.chomp
 end
@@ -98,67 +93,97 @@ def valid_move?(board, cell, token_array)
   cell
 end
 
-board = Board.new
+def take_turns(board, player1, player2, token_array)
+  winner = nil
 
-puts 'Welcome to Ruby Tic-Tac-Toe!'
-puts
-puts 'Enter Player 1 Name:'
-p1_name = user_input
-p1_name = validate_name(p1_name)
-player1 = Player.new(p1_name, CHARACTER_1)
-puts
+  9.times do |turn|
+    player = turn.even? ? player1 : player2
+    puts
+    puts "It's #{player}'s turn"
+    puts
+    puts 'Please select an available cell from the board `- -`'
+    puts
+    cell = user_input.to_i
+    cell = valid_move?(board, cell, token_array)
+    board.set(cell, player.token)
 
-puts 'Enter Player 2 Name:'
-p2_name = user_input
-p2_name = validate_name(p2_name)
-player2 = Player.new(p2_name, CHARACTER_2)
-puts
+    if turn >= 4
+      winner = check_winner(board, player1, player2)
+      break if winner
+    end
 
-puts "#{player1} will play #{CHARACTER_1} and #{player2} will play #{CHARACTER_2}"
-puts
-puts 'Let us play!'
-
-sleep(3)
-
-clear_terminal
-
-sleep(1)
-
-puts board
-
-winner = nil
-
-9.times do |turn|
-  player = turn.even? ? player1 : player2
-  puts
-  puts "It's #{player}'s turn"
-  puts
-  puts 'Please select an available cell from the board `- -`'
-  puts
-  cell = user_input.to_i
-  cell = valid_move?(board, cell, token_array)
-  board.set(cell, player.token)
-
-  if turn >= MIN_MOVES - 1
-    winner = check_winner(board, player1, player2)
-    break if winner
+    sleep 1
+    clear_terminal
+    puts board
   end
 
-  sleep 1
-  clear_terminal
-  puts board
+  winner
 end
 
-sleep(1)
-
-clear_terminal
-puts board
-puts
-
-if winner
-  puts "#{winner} you WIN the game"
-else
-  puts "It's a TIE!"
+def replay?
+  puts 'Please Enter y for a new game or x for exit'
   puts
-  puts 'Game Over'
+
+  loop do
+    command = user_input.downcase
+    if command == 'x'
+      clear_terminal
+      exit
+    elsif command == 'y'
+      clear_terminal
+      play_game
+    else
+      clear_lines(3)
+      puts 'Sorry, Invalid Input. Please Enter y for a new game or x for exit'
+      puts
+    end
+  end
 end
+
+def get_player(prompt, character)
+  puts prompt
+  name = user_input
+  name = validate_name(name)
+  player = Player.new(name, character)
+  puts
+  player
+end
+
+def play_game
+  token_array = %w[X O]
+
+  board = Board.new
+
+  puts "Welcome to Ruby Tic-Tac-Toe!\n\n"
+
+  player1 = get_player('Enter Player 1 Name:', token_array[0])
+
+  player2 = get_player('Enter Player 2 Name:', token_array[1])
+
+  puts "#{player1} will play #{token_array[0]} and #{player2} will play #{token_array[1]}\n\nLet us play!"
+
+  sleep(3)
+
+  clear_terminal
+
+  sleep(1)
+
+  puts board
+
+  winner = take_turns(board, player1, player2, token_array)
+
+  sleep(1)
+
+  clear_terminal
+  puts "#{board}\n\n"
+
+  if winner
+    puts "#{winner} you WIN the game\n\n"
+  else
+    puts "It's a TIE!\n\nGame Over\n\n"
+  end
+
+  replay?
+end
+
+play_game
