@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative './board.rb'
-require_relative './player.rb'
+require_relative './board'
+require_relative './player'
 
 CHARACTER_1 = 'X'.freeze
 CHARACTER_2 = 'O'.freeze
@@ -20,18 +20,10 @@ def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
 
-def display_board
-  puts '+---+---+---+'
-  puts '| 1 | 2 | 3 |'
-  puts '+---+---+---+'
-  puts '| 4 | 5 | 6 |'
-  puts '+---+---+---+'
-  puts '| 7 | 8 | 9 |'
-  puts '+---+---+---+'
-end
+board = Board.new
 
 def choose_winner(player1, player2)
-  num = rand(10)
+  num = rand(15)
   if num < 5
     puts "#{player1} you WIN the game"
   elsif num < 10
@@ -82,7 +74,7 @@ clear_terminal
 
 sleep(1)
 
-display_board
+puts board
 
 9.times do |turn|
   lines = 6
@@ -99,8 +91,10 @@ display_board
     cell = user_input.to_i
     lines += 2
   end
+  board.set(cell, player.token)
   sleep 1
-  clear_lines(lines)
+  clear_terminal
+  puts board
 end
 
 sleep(1)
