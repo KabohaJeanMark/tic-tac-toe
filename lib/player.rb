@@ -5,8 +5,4 @@ class Player
     @name = name.capitalize
     @token = token
   end
-
-  def to_s
-    @name
-  end
 end
