@@ -24,7 +24,29 @@ rubocop --color
 ```
 bin/main.rb
 ```
-- Expect output "Hello World!" for now for this first milestone.
+Welcome runs on terminal to get player names and designate tokens
+
+![welcome](assets/welcome-2.png)
+
+Choose a valid number from 1 to 9 (asking player 1)
+
+![valid](assets/valid_move.png)
+
+Next player's turn (player 2)
+
+![valid](assets/another_turn.png)
+
+What happens if an invalid number is chosen?
+
+![invalid](assets/invalid_move.png)
+
+TIE
+
+![invalid](assets/milestone2-tie.png)
+
+WIN
+
+![invalid](assets/milestone2-win.png)
 
 ## Authors
 
