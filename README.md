@@ -1,5 +1,5 @@
 # tic-tac-toe
-A tic tac toe game implemented using OOP best practices and a DRY approach in Ruby.
+A tic tac toe game implemented using Object Oriented Programming best practices and a DRY approach in Ruby.
 
 ![](https://img.shields.io/badge/Microverse-blueviolet)
 

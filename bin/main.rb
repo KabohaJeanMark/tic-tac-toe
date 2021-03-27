@@ -15,19 +15,6 @@ def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
 
-def choose_winner(player1, player2)
-  num = rand(15)
-  if num < 5
-    puts "#{player1.name} you WIN the game"
-  elsif num < 10
-    puts "It's a TIE!"
-    puts
-    puts 'Game Over'
-  else
-    puts "#{player2.name} you WIN the game"
-  end
-end
-
 def validate_name(name)
   loop do
     if name == ''
