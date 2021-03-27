@@ -1,42 +1,30 @@
 #!/usr/bin/env ruby
 
-CHARACTER_1 = 'X'.freeze
-CHARACTER_2 = 'O'.freeze
+require_relative '../lib/board'
+require_relative '../lib/player'
 
 def user_input
   gets.chomp
 end
 
 def clear_terminal
-  system('clear') || system('cls') # https://stackoverflow.com/a/19059008
+  system('clear') || system('cls')
 end
 
-# https://stackoverflow.com/a/31090956
-# see comment by cremno
 def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
 
-def display_board
-  puts '+---+---+---+'
-  puts '| 1 | 2 | 3 |'
-  puts '+---+---+---+'
-  puts '| 4 | 5 | 6 |'
-  puts '+---+---+---+'
-  puts '| 7 | 8 | 9 |'
-  puts '+---+---+---+'
-end
-
-def choose_winner(player1_name, player2_name)
-  num = rand(10)
+def choose_winner(player1, player2)
+  num = rand(15)
   if num < 5
-    puts "#{player1_name} you WIN the game"
+    puts "#{player1.name} you WIN the game"
   elsif num < 10
     puts "It's a TIE!"
     puts
     puts 'Game Over'
   else
-    puts "#{player2_name} you WIN the game"
+    puts "#{player2.name} you WIN the game"
   end
 end
 
@@ -55,53 +43,145 @@ def validate_name(name)
   name
 end
 
-puts 'Welcome to Ruby Tic-Tac-Toe!'
-puts
-puts 'Enter Player 1 Name:'
-p1_name = user_input
-player1_name = validate_name(p1_name)
-puts
-
-puts 'Enter Player 2 Name:'
-p2_name = user_input.capitalize
-player2_name = validate_name(p2_name)
-puts
-
-puts "#{player1_name} will play #{CHARACTER_1} and #{player2_name} will play #{CHARACTER_2}"
-puts
-puts 'Let us play!'
-
-sleep(3)
-
-clear_terminal
-
-sleep(1)
-
-display_board
-
-9.times do |turn|
-  lines = 6
-
-  name = turn.even? ? player1_name : player2_name
-  puts
-  puts "It's #{name}'s turn"
-  puts
-  puts 'Please select an available cell from the board `- -`'
-  puts
-  cell = user_input.to_i
-  while cell < 1 || cell > 9
-    puts 'Invalid move. Please enter a number from 1-9'
-    cell = user_input.to_i
-    lines += 2
+def check_three_cells_match(array, board, token)
+  result = true
+  array.each do |cell|
+    if board.track(cell) != token
+      result = false
+      break
+    end
   end
-  sleep 1
-  clear_lines(lines)
+  result
 end
 
-sleep(1)
+def check_winner(board, player1, player2)
+  players = [player1, player2]
+  groups = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7]
+  ]
+  groups.each do |group|
+    players.each { |player| return player if check_three_cells_match(group, board, player.token) }
+  end
+  nil
+end
 
-puts
+def valid_move?(board, cell, token_array)
+  loop do
+    num = cell.to_i
+    if num < 1 || num > 9
+      clear_lines(3)
+      puts "Invalid move. Please enter a number from 1-9. #{cell} is not a valid number"
+      puts
+      cell = user_input
+    elsif token_array.include?(board.track(num))
+      clear_lines(3)
+      puts "Invalid move. Position #{cell} already played. Please select another number"
+      puts
+      cell = user_input
+    else
+      break
+    end
+  end
+  cell.to_i
+end
 
-choose_winner(player1_name, player2_name)
+def take_turns(board, player1, player2, token_array)
+  winner = nil
 
-sleep(2)
+  9.times do |turn|
+    player = turn.even? ? player1 : player2
+    puts
+    puts "It's #{player.name}'s turn"
+    puts
+    puts 'Please select an available cell from the board `- -`'
+    puts
+    cell = user_input
+    cell = valid_move?(board, cell, token_array)
+    board.set(cell, player.token)
+
+    if turn >= 4
+      winner = check_winner(board, player1, player2)
+      break if winner
+    end
+
+    sleep(0.5)
+    clear_terminal
+    puts board
+  end
+
+  winner
+end
+
+def replay?
+  puts 'Please Enter y for a new game or x for exit'
+  puts
+
+  loop do
+    command = user_input.downcase
+    case command
+    when 'x'
+      clear_terminal
+      exit
+    when 'y'
+      clear_terminal
+      play_game
+    else
+      clear_lines(3)
+      puts 'Sorry, Invalid Input. Please Enter y for a new game or x for exit'
+      puts
+    end
+  end
+end
+
+def get_player(prompt, character)
+  puts prompt
+  name = user_input
+  name = validate_name(name)
+  player = Player.new(name, character)
+  puts
+  player
+end
+
+def play_game
+  token_array = %w[X O]
+
+  board = Board.new
+
+  puts "Welcome to Ruby Tic-Tac-Toe!\n\n"
+
+  player1 = get_player('Enter Player 1 Name:', token_array[0])
+
+  player2 = get_player('Enter Player 2 Name:', token_array[1])
+
+  puts "#{player1.name} will play #{token_array[0]} and #{player2.name} will play #{token_array[1]}\n\nLet us play!"
+
+  sleep(1)
+
+  clear_terminal
+
+  puts board
+
+  winner = take_turns(board, player1, player2, token_array)
+
+  sleep(0.5)
+
+  clear_terminal
+  puts "#{board}\n\n"
+
+  if winner
+    puts "#{winner.name} you WIN the game\n\n"
+  else
+    puts "It's a TIE!\n\nGame Over\n\n"
+  end
+
+  replay?
+end
+
+play_game
