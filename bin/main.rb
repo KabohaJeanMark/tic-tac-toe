@@ -1,18 +1,16 @@
 #!/usr/bin/env ruby
 
-require_relative './board'
-require_relative './player'
+require_relative '../lib/board'
+require_relative '../lib/player'
 
 def user_input
   gets.chomp
 end
 
 def clear_terminal
-  system('clear') || system('cls') # https://stackoverflow.com/a/19059008
+  system('clear') || system('cls')
 end
 
-# https://stackoverflow.com/a/31090956
-# see comment by cremno
 def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
@@ -20,13 +18,13 @@ end
 def choose_winner(player1, player2)
   num = rand(15)
   if num < 5
-    puts "#{player1} you WIN the game"
+    puts "#{player1.name} you WIN the game"
   elsif num < 10
     puts "It's a TIE!"
     puts
     puts 'Game Over'
   else
-    puts "#{player2} you WIN the game"
+    puts "#{player2.name} you WIN the game"
   end
 end
 
@@ -100,7 +98,7 @@ def take_turns(board, player1, player2, token_array)
   9.times do |turn|
     player = turn.even? ? player1 : player2
     puts
-    puts "It's #{player}'s turn"
+    puts "It's #{player.name}'s turn"
     puts
     puts 'Please select an available cell from the board `- -`'
     puts
@@ -113,7 +111,7 @@ def take_turns(board, player1, player2, token_array)
       break if winner
     end
 
-    sleep 1
+    sleep(0.5)
     clear_terminal
     puts board
   end
@@ -162,25 +160,23 @@ def play_game
 
   player2 = get_player('Enter Player 2 Name:', token_array[1])
 
-  puts "#{player1} will play #{token_array[0]} and #{player2} will play #{token_array[1]}\n\nLet us play!"
-
-  sleep(3)
-
-  clear_terminal
+  puts "#{player1.name} will play #{token_array[0]} and #{player2.name} will play #{token_array[1]}\n\nLet us play!"
 
   sleep(1)
+
+  clear_terminal
 
   puts board
 
   winner = take_turns(board, player1, player2, token_array)
 
-  sleep(1)
+  sleep(0.5)
 
   clear_terminal
   puts "#{board}\n\n"
 
   if winner
-    puts "#{winner} you WIN the game\n\n"
+    puts "#{winner.name} you WIN the game\n\n"
   else
     puts "It's a TIE!\n\nGame Over\n\n"
   end
