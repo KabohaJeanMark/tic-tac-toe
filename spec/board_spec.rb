@@ -14,5 +14,12 @@ describe Board do
       expect(subject.cells[cell]).to eq('X')
     end
   end
-  
+
+  describe "#track" do
+    it 'checks the value of that board position' do
+      cell = 9
+      subject.set(cell, 'O')
+      expect(subject.track(cell)).to eq('O')
+    end
+  end
 end
