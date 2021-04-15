@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
-require_relative 'board'
-require_relative 'player'
+require_relative '../lib/board'
+require_relative '../lib/player'
 
 def user_input
   gets.chomp
@@ -93,7 +93,6 @@ end
 
 def replay?
   puts 'Please Enter y for a new game or x for exit'
-  puts
 
   loop do
     command = user_input.downcase
@@ -107,71 +106,67 @@ def replay?
     else
       clear_lines(3)
       puts 'Sorry, Invalid Input. Please Enter y for a new game or x for exit'
-      puts
     end
   end
 end
 
-class Game
-  def play_game
-    token_array = %w[X O]
+def get_player(prompt, character)
+  puts prompt
+  name = user_input
+  name = validate_name(name)
+  player = Player.new(name, character)
+  puts
+  player
+end
 
-    board = Board.new
-
-    puts "Welcome to Ruby Tic-Tac-Toe!\n\n"
-
-    player1 = get_player('Enter Player 1 Name:', token_array[0])
-
-    player2 = get_player('Enter Player 2 Name:', token_array[1])
-
-    puts "#{player1.name} will play #{token_array[0]} and #{player2.name} will play #{token_array[1]}\n\nLet us play!"
-
-    sleep(1)
-
-    clear_terminal
-
-    puts board
-
-    winner = take_turns(board, player1, player2, token_array)
-
-    sleep(0.5)
-
-    clear_terminal
-    puts "#{board}\n\n"
-
-    if winner
-      puts "#{winner.name} you WIN the game\n\n"
+def validate_name(name)
+  loop do
+    if name == ''
+      puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
+      name = user_input.capitalize
+    elsif name.length < 2
+      puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
+      name = user_input.capitalize
     else
-      puts "It's a TIE!\n\nGame Over\n\n"
+      break
     end
-
-    replay?
   end
-
-  def get_player(prompt, character)
-    puts prompt
-    name = user_input
-    name = validate_name(name)
-    player = Player.new(name, character)
-    puts
-    player
-  end
-
-  def validate_name(name)
-    loop do
-      if name == ''
-        puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
-        name = user_input.capitalize
-      elsif name.length < 2
-        puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
-        name = user_input.capitalize
-      else
-        break
-      end
-    end
-    name
-  end
+  name
 end
 
-new_game = Game.new
-new_game.play_game
+def play_game
+  token_array = %w[X O]
+
+  board = Board.new
+
+  puts "Welcome to Ruby Tic-Tac-Toe!\n\n"
+
+  player1 = get_player('Enter Player 1 Name:', token_array[0])
+
+  player2 = get_player('Enter Player 2 Name:', token_array[1])
+
+  puts "#{player1.name} will play #{token_array[0]} and #{player2.name} will play #{token_array[1]}\n\nLet us play!"
+
+  sleep(1)
+
+  clear_terminal
+
+  puts board
+
+  winner = take_turns(board, player1, player2, token_array)
+
+  sleep(0.5)
+
+  clear_terminal
+  puts "#{board}\n\n"
+
+  if winner
+    puts "#{winner.name} you WIN the game\n\n"
+  else
+    puts "It's a TIE!\n\nGame Over\n\n"
+  end
+
+  replay?
+end
+
+play_game
