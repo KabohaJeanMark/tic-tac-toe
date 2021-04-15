@@ -5,6 +5,10 @@ describe Board do
     it 'contains a hash of numbers' do
       expect(subject.cells).to be_a(Hash)
     end
+
+    it 'raises error if args are passed' do
+      expect { Board.new('X') }.to raise_error(ArgumentError)
+    end
   end
 
   describe '#set' do
@@ -13,6 +17,10 @@ describe Board do
       subject.set(cell, 'X')
       expect(subject.cells[cell]).to eq('X')
     end
+
+    it 'raises argument error if only one arg is passed' do
+      expect {subject.set('X')}.to raise_error(ArgumentError)
+    end
   end
 
   describe '#track' do
@@ -20,6 +28,10 @@ describe Board do
       cell = 9
       subject.set(cell, 'O')
       expect(subject.track(cell)).to eq('O')
+    end
+
+    it 'raises argument error if no args are passed' do
+      expect {subject.track}.to raise_error(ArgumentError)
     end
   end
 end
