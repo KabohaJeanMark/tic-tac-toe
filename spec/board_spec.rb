@@ -19,7 +19,7 @@ describe Board do
     end
 
     it 'raises argument error if only one arg is passed' do
-      expect {subject.set('X')}.to raise_error(ArgumentError)
+      expect { subject.set('X') }.to raise_error(ArgumentError)
     end
   end
 
@@ -31,7 +31,7 @@ describe Board do
     end
 
     it 'raises argument error if no args are passed' do
-      expect {subject.track}.to raise_error(ArgumentError)
+      expect { subject.track }.to raise_error(ArgumentError)
     end
   end
 end
