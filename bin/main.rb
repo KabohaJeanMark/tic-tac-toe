@@ -15,21 +15,6 @@ def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
 
-def validate_name(name)
-  loop do
-    if name == ''
-      puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
-      name = user_input.capitalize
-    elsif name.length < 2
-      puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
-      name = user_input.capitalize
-    else
-      break
-    end
-  end
-  name
-end
-
 def check_three_cells_match(array, board, token)
   result = true
   array.each do |cell|
@@ -127,48 +112,66 @@ def replay?
   end
 end
 
-def get_player(prompt, character)
-  puts prompt
-  name = user_input
-  name = validate_name(name)
-  player = Player.new(name, character)
-  puts
-  player
-end
+class Game
+  def play_game
+    token_array = %w[X O]
 
-def play_game
-  token_array = %w[X O]
+    board = Board.new
 
-  board = Board.new
+    puts "Welcome to Ruby Tic-Tac-Toe!\n\n"
 
-  puts "Welcome to Ruby Tic-Tac-Toe!\n\n"
+    player1 = get_player('Enter Player 1 Name:', token_array[0])
 
-  player1 = get_player('Enter Player 1 Name:', token_array[0])
+    player2 = get_player('Enter Player 2 Name:', token_array[1])
 
-  player2 = get_player('Enter Player 2 Name:', token_array[1])
+    puts "#{player1.name} will play #{token_array[0]} and #{player2.name} will play #{token_array[1]}\n\nLet us play!"
 
-  puts "#{player1.name} will play #{token_array[0]} and #{player2.name} will play #{token_array[1]}\n\nLet us play!"
+    sleep(1)
 
-  sleep(1)
+    clear_terminal
 
-  clear_terminal
+    puts board
 
-  puts board
+    winner = take_turns(board, player1, player2, token_array)
 
-  winner = take_turns(board, player1, player2, token_array)
+    sleep(0.5)
 
-  sleep(0.5)
+    clear_terminal
+    puts "#{board}\n\n"
 
-  clear_terminal
-  puts "#{board}\n\n"
+    if winner
+      puts "#{winner.name} you WIN the game\n\n"
+    else
+      puts "It's a TIE!\n\nGame Over\n\n"
+    end
 
-  if winner
-    puts "#{winner.name} you WIN the game\n\n"
-  else
-    puts "It's a TIE!\n\nGame Over\n\n"
+    replay?
   end
 
-  replay?
+  def get_player(prompt, character)
+    puts prompt
+    name = user_input
+    name = validate_name(name)
+    player = Player.new(name, character)
+    puts
+    player
+  end
+
+  def validate_name(name)
+    loop do
+      if name == ''
+        puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
+        name = user_input.capitalize
+      elsif name.length < 2
+        puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
+        name = user_input.capitalize
+      else
+        break
+      end
+    end
+    name
+  end
 end
 
-play_game
+new_game = Game.new
+new_game.play_game
