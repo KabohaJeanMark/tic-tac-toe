@@ -1,4 +1,6 @@
 class Board
+  attr_reader :cells
+
   def initialize
     @cells = {}
     reset
@@ -15,6 +17,8 @@ class Board
   def track(cell)
     @cells[cell]
   end
+
+  private
 
   def to_s
     demacator = "+---+---+---+\n"

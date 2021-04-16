@@ -20,9 +20,22 @@ Tic-tac-toe, noughts and crosses, or Xs and Os/“X’y O’sies”, is a paper-
 rubocop --color
 ```
 
-## GAMEPLAY INSTRUCTIONS
+## INSTRUCTIONS TO RUN THE PROJECT LOCALLY
+- git clone this [repo](https://github.com/KabohaJeanMark/tic-tac-toe/) to your local machine and navigate (cd ) to the top directory containing the main.rb file by running the following commands.
+```
+git clone https://github.com/KabohaJeanMark/tic-tac-toe/
+cd tic-tac-toe
+```
 
-### Usage
+### Run tests with Rspec
+- Rspec is used to run the tests checking both negative and positive edge cases for the public methods in the Player and Board classes.
+- Change directory into the main project directory and run the rspec command.
+```
+cd tic-tac-toe
+rspec
+```
+
+### GAMEPLAY INSTRUCTIONS
 git clone this [repo](https://github.com/KabohaJeanMark/tic-tac-toe/) to your local machine and navigate (cd ) to the top directory containing the main.rb file by running the following commands.
 
 #### set up 

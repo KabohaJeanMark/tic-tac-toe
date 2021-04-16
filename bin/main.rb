@@ -15,21 +15,6 @@ def clear_lines(count)
   count.times { print "\e[A\e[2K" }
 end
 
-def validate_name(name)
-  loop do
-    if name == ''
-      puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
-      name = user_input.capitalize
-    elsif name.length < 2
-      puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
-      name = user_input.capitalize
-    else
-      break
-    end
-  end
-  name
-end
-
 def check_three_cells_match(array, board, token)
   result = true
   array.each do |cell|
@@ -108,7 +93,6 @@ end
 
 def replay?
   puts 'Please Enter y for a new game or x for exit'
-  puts
 
   loop do
     command = user_input.downcase
@@ -122,7 +106,6 @@ def replay?
     else
       clear_lines(3)
       puts 'Sorry, Invalid Input. Please Enter y for a new game or x for exit'
-      puts
     end
   end
 end
@@ -134,6 +117,21 @@ def get_player(prompt, character)
   player = Player.new(name, character)
   puts
   player
+end
+
+def validate_name(name)
+  loop do
+    if name == ''
+      puts 'Please enter your name. Do not leave it empty. We need to know who wins :)'
+      name = user_input.capitalize
+    elsif name.length < 2
+      puts 'Please enter a longer name. 1 digit is too short. Atleast 2 initials.'
+      name = user_input.capitalize
+    else
+      break
+    end
+  end
+  name
 end
 
 def play_game
